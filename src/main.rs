@@ -1,37 +1,38 @@
-extern crate headless_chrome;
-use headless_chrome::Browser;
-use std::collections::HashSet;
-use std::collections::HashMap;
-use anyhow::Result;
+use std::env;
+use std::fs;
+use rand::Rng;
 
-fn main() -> Result<()> {
-    let browser = Browser::default()?;
-    let tab = browser.new_tab()?;
-
-    tab.navigate_to("https://namegentool.com/pt/cyberpunk-name-generator")?;
-
-    let elements = tab.wait_for_elements("[data-name]")?;
-
-    let mut all_data = HashSet::new();
-    for element in elements {
-        if let Ok(Some(attributes)) = element.get_attributes() {
-            let mut attr_map = HashMap::new();
-            for attr in attributes {
-                let parts: Vec<&str> = attr.split('=').collect();
-                if parts.len() == 2 {
-                    attr_map.insert(parts[0].to_string(), parts[1].to_string());
-                }
-            }
-            if let Some(name) = attr_map.get("data-name") {
-                all_data.insert(name.clone());
-            }
-        }
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 2 {
+        println!("Por favor, forneça um número como argumento.");
+        return;
     }
 
-    // Print all unique occurrences of 'data-name'
-    println!("{:?}", all_data);
+    let num_words = match args[1].parse::<usize>() {
+        Ok(n) => n,
+        Err(_) => {
+            println!("Por favor, forneça um número válido como argumento.");
+            return;
+        }
+    };
 
-    // Rest of your code...
+    let words = vec!["Acid","Aero","Agile","Alco","Alter","Answer","Ant","Arch","Art","Aspect","Audience","Aura","Aurora","Awe","Badge","Bait","Bandage","Bank","Banks","Bargain","Barrage","Basis","Bat","Beam","Beast","Beauty","Bee","Beetle","Bell","Bells","Bird","Blade","Blank","Block","Blunder","Bold","Bolt","Bomb","Bone","Bones","Bonus","Books","Boost","Boot","Boots","Brash","Brass","Brave","Bribe","Brick","Bright","Brush","Cable","Canine","Canvas","Cash","Catch","Cause","Cell","Cent","Chain","Chalk","Chance","Change","Chaos","Charge","Chart","Cheat","Checkmate","Click","Clock","Clocks","Cloud","Coarse","Coil","Collar","Complex","Console","Crash","Craven","Cross","Crumbs","Cycle","Dapper","Dare","Data","Deal","Design","Detail","Dish","Disk","Double","Dynamic","Dynamo","Edge","Ego","Elite","Eternity","Fearless","Feature","Feedback","Fickle","Fix","Flaky","Fluke","Friction","Frost","Gain","Game","Gear","Gene","Ghost","Gift","Glove","Grave","Grim","Habit","Hack","Hacks","Heat","Hide","Hollow","Hook","Ice","Impulse","Ink","Iron","Jumbo","Junior","Law","Light","Link","Lock","Luck","Mammoth","Math","Maths","Mellow","Memory","Mirror","Mouse","Nemo","Night","Nightowl","Nimble","Noise","Note","Nova","Number","Omen","Owl","Panther","Parcel","Path","Pathfinder","Patriot","Phase","Piece","Pitch","Poison","Prime","Print","Prompt","Push","Quote","Range","Rebel","Requiem","Riddle","Risk","Route","Sable","Scene","Score","Session","Shade","Shallow","Shift","Shiny","Signal","Silver","Slice","Slide","Spark","Spring","Status","Stitch","Stranger","Stretch","Survey","Switch","Thrill","Trick","Tune","Unit","Venom","Virus","Ward","Wicked","Wish","Zen","Zero","Zigzag","Zone"];
+    let mut rng = rand::thread_rng();
+    let mut name = String::new();
 
-    Ok(())
+    for i in 0..num_words {
+        let index = rng.gen_range(0..words.len());
+        if i > 0 {
+            name.push('-');
+        }
+        name.push_str(words[index]);
+    }
+
+    println!("Nome gerado: {}", name);
+
+    match fs::create_dir(&name) {
+        Err(why) => println!("Erro ao criar diretório: {}", why),
+        Ok(_) => println!("Diretório '{}' criado com sucesso.", name),
+    }
 }
