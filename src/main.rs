@@ -29,6 +29,9 @@ fn main() {
         name.push_str(words[index]);
     }
 
+    // Convertendo o nome para minúsculas
+    let name = name.to_lowercase();
+
     println!("Nome gerado: {}", name);
 
     match fs::create_dir(&name) {
