@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Por favor, forneça um número como argumento."
+    exit 1
+fi
+
+num_words=$1
+words=("Acid" "Aero" "Agile" "Alco" "Alter" "Answer" "Ant" "Arch" "Art" "Aspect" "Audience" "Aura" "Aurora" "Awe" "Badge" "Bait" "Bandage" "Bank" "Banks" "Bargain" "Barrage" "Basis" "Bat" "Beam" "Beast" "Beauty" "Bee" "Beetle" "Bell" "Bells" "Bird" "Blade" "Blank" "Block" "Blunder" "Bold" "Bolt" "Bomb" "Bone" "Bones" "Bonus" "Books" "Boost" "Boot" "Boots" "Brash" "Brass" "Brave" "Bribe" "Brick" "Bright" "Brush" "Cable" "Canine" "Canvas" "Cash" "Catch" "Cause" "Cell" "Cent" "Chain" "Chalk" "Chance" "Change" "Chaos" "Charge" "Chart" "Cheat" "Checkmate" "Click" "Clock" "Clocks" "Cloud" "Coarse" "Coil" "Collar" "Complex" "Console" "Crash" "Craven" "Cross" "Crumbs" "Cycle" "Dapper" "Dare" "Data" "Deal" "Design" "Detail" "Dish" "Disk" "Double" "Dynamic" "Dynamo" "Edge" "Ego" "Elite" "Eternity" "Fearless" "Feature" "Feedback" "Fickle" "Fix" "Flaky" "Fluke" "Friction" "Frost" "Gain" "Game" "Gear" "Gene" "Ghost" "Gift" "Glove" "Grave" "Grim" "Habit" "Hack" "Hacks" "Heat" "Hide" "Hollow" "Hook" "Ice" "Impulse" "Ink" "Iron" "Jumbo" "Junior" "Law" "Light" "Link" "Lock" "Luck" "Mammoth" "Math" "Maths" "Mellow" "Memory" "Mirror" "Mouse" "Nemo" "Night" "Nightowl" "Nimble" "Noise" "Note" "Nova" "Number" "Omen" "Owl" "Panther" "Parcel" "Path" "Pathfinder" "Patriot" "Phase" "Piece" "Pitch" "Poison" "Prime" "Print" "Prompt" "Push" "Quote" "Range" "Rebel" "Requiem" "Riddle" "Risk" "Route" "Sable" "Scene" "Score" "Session" "Shade" "Shallow" "Shift" "Shiny" "Signal" "Silver" "Slice" "Slide" "Spark" "Spring" "Status" "Stitch" "Stranger" "Stretch" "Survey" "Switch" "Thrill" "Trick" "Tune" "Unit" "Venom" "Virus" "Ward" "Wicked" "Wish" "Zen" "Zero" "Zigzag" "Zone")
+name=""
+
+for ((i = 0; i < num_words; i++)); do
+    index=$((RANDOM % ${#words[@]}))
+    if [ $i -gt 0 ]; then
+        name+="-"
+    fi
+    name+="${words[index]}"
+done
+
+# Convertendo o nome para minúsculas
+name=$(echo "$name" | tr '[:upper:]' '[:lower:]')
+
+echo "Nome gerado: $name"
+
+if [ ! -d "$name" ]; then
+    mkdir "$name"
+    if [ $? -eq 0 ]; then
+        echo "Diretório '$name' criado com sucesso."
+    else
+        echo "Erro ao criar diretório."
+        exit 1
+    fi
+else
+    echo "O diretório '$name' já existe."
+fi
