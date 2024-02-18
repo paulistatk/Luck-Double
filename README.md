@@ -1,3 +1,3 @@
-This Rust code generates a random fictional name consisting of 1 to 10 hyphen-separated words and then creates a directory with that name. The code uses the rand crate for generating random numbers and the std::fs crate for file system operations. The main function starts by handling command line arguments, ensuring that a valid number of words is provided. It then proceeds to generate a name, convert it to lowercase, and create a directory with that name. Error handling is included for directory creation, and success or failure messages are printed accordingly.
+This Rust code generates a random fictional name consisting of 1 to 10 hyphen-separated words and then creates a directory with that name.
 
 The bash script makes the same also.
